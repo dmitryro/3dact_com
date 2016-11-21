@@ -1,0 +1,44 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>3D Act</title>
+    <meta charset="utf-8">
+    <link href="http://3dact.com/static/css/nv.d3.css" rel="stylesheet" type="text/css">
+<!--
+    <script src="http://fuelcdn.com/fuelux/2.3/loader.min.js"></script> 
+-->
+
+<!--
+    <script src="http://3dact.com/static/js/require.js"></script>
+-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
+
+
+    <script src="http://3dact.com/static/js/nv.d3.js"></script>
+    <script src="http://3dact.com/static/js/require.js"></script>
+<!--
+    <script src="http://3dact.com/static/js/wq/chart.js"></script>
+    <script src="http://3dact.com/static/js/wq/pandas.js"></script>
+-->
+    <style>
+        text {
+            font: 12px sans-serif;
+        }
+        svg {
+            display: block;
+        }
+        html, body, #chart1, svg {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+
+</head>
+<body>
+{% block content %}{% endblock %}
+</body>
+</html>
