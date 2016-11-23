@@ -142,3 +142,66 @@ class Profile(models.Model):
    def __getitem__(self,items):
        return self.user.username
 
+
+# User Session Model
+class UserSession(models.Model):
+    # We need the username of the user in session
+    username =  models.CharField(max_length=200,
+                                 blank=True,
+                                 null=True)
+
+    # We need the remote ip of the user in session
+    remote_ip = models.CharField(max_length=20,
+                                 blank=True,
+                                 null=True)
+
+    # We need the session key of the user in session
+    session_key = models.CharField(max_length=200,
+                                   blank=True,
+                                   null=True)
+
+    # We refer the user by foreign key to relate 
+    user = models.ForeignKey(User,
+                             blank=False,
+                             null=False)
+
+    # We want to know the time when the user signed in
+    time_in = models.DateTimeField(auto_now_add=True)
+
+    # We want to know the time when the user signed out
+    time_out = models.DateTimeField('Time Logged Out',
+                                    blank=True,null=True)
+
+    # We want to know the time the user spent online in hours
+    time_online_hours = models.IntegerField(default=0,
+                                            blank=True,
+                                            null=True)
+
+    # We wantto know the time the user spent online in minutes
+    time_online_minutes = models.IntegerField(default=0,
+                                              blank=True,
+                                              null=True)
+
+    #We want to know the time the user spent online in seconds
+    time_online_seconds = models.IntegerField(default=0,
+                                              blank=True,
+                                              null=True)
+
+    # We want to know the total time online
+    time_online_total = models.CharField(max_length=200,
+                                         blank=True,
+                                         null=True)
+
+    # We want to know how much time the user spent 
+    time_online_delta = models.FloatField(default=0,
+                                          blank=True,
+                                          null=True)
+
+    # We want to know the date when the user visited.  
+    date_visited = models.DateField(blank=True,null=True)
+   
+
+    class Meta:
+        verbose_name = 'Session'
+        verbose_name_plural = 'Sessions'
+
