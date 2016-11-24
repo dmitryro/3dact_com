@@ -6,6 +6,7 @@ from taggit.managers import TaggableManager
 from django.template.defaultfilters import slugify
 from django.utils.encoding import python_2_unicode_compatible
 
+
 @python_2_unicode_compatible
 class Emotion(models.Model):
    date_measured = models.DateTimeField('Time measured',blank=True,null=True,auto_now_add=True)
