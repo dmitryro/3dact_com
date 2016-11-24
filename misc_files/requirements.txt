@@ -19,6 +19,7 @@ django-encrypted-fields==1.1.2
 django-extensions==1.7.4
 django-filter==0.15.3
 django-grappelli==2.9.1
+django-hippo==0.2.0
 django-mediagenerator==1.12
 django-oauth-toolkit==0.10.0
 django-oauth2-provider==0.2.6.1
