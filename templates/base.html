@@ -10,14 +10,12 @@
     <script src="http://fuelcdn.com/fuelux/2.3/loader.min.js"></script> 
 -->
 
-<!--
     <script src="http://3dact.com/static/js/require.js"></script>
--->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
 
-
     <script src="http://3dact.com/static/js/nv.d3.js"></script>
-    <script src="http://3dact.com/static/js/require.js"></script>
+    <script src="http://3dact.com/static/js/jquery.js"></script>
+    <!-- Application Styles and Scripts -->
 <!--
     <script src="http://3dact.com/static/js/wq/chart.js"></script>
     <script src="http://3dact.com/static/js/wq/pandas.js"></script>
@@ -37,6 +35,20 @@
         }
     </style>
 
+   <style media="screen">
+    #drawing_board {
+        height: 480px;
+        width: 640px;
+        border:1px solid #000000;
+    }
+    </style>
+ 
+    <script>
+    $(document).ready(function(){
+        var paper = Raphael('canvas_container');
+        // Put example JS here...
+    });
+    </script>
 </head>
 <body>
 {% block content %}{% endblock %}

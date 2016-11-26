@@ -25,12 +25,14 @@ from rest_framework import routers
 from custom.emotion.views import EmotionViewSet
 from custom.emotion.views import EmotionView
 from custom.emotion.views import emotion_view
+from custom.emotion.views import render_view
+from custom.emotion.views import game_view
+from custom.emotion.views import pen_view
 from custom.graphs.views import graphs_view
 from custom.users.views import UserViewSet
 from custom.users.views import StateViewSet
 from custom.users.views import ProfileViewSet
 
-from rest_framework import routers
 # Serializers define the API representation.
 
 # Routers provide an easy way of automatically determining the URL conf.
@@ -50,5 +52,8 @@ urlpatterns = [
     url(r'^auth/', include('rest_framework_social_oauth2.urls')),
     url(r'^emotionsdata/$',emotion_view),
     url(r'^graphs/$',graphs_view),
+    url(r'^games/$',game_view), 
+    url(r'^render/$',render_view),
+    url(r'^pentool/$',pen_view),
     url('', include('social.apps.django_app.urls', namespace='social')),
 ]

@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>3D Act</title>
+    <meta charset="utf-8">
+    <link href="http://3dact.com/static/css/nv.d3.css" rel="stylesheet" type="text/css">
+<!--
+    <script src="http://fuelcdn.com/fuelux/2.3/loader.min.js"></script> 
+-->
+
+<!--
+    <script src="http://3dact.com/static/js/require.js"></script>
+-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
+
+    <!-- Bring In Bootstrap -->
+    <script src="http://3dact.com/static/js/nv.d3.js"></script>
+    <script src="http://3dact.com/static/js/jquery.js"></script>
+    <script src="http://3dact.com/static/js/raphael.min.js"></script>
+    <script src="http://3dact.com/static/js/raphael.export.js"><script>
+    <script src="http://3dact.com/static/js/raphael.free_transform.js"></script>
+    <script src="http://3dact.com/static/js/json2-min.js"></script>
+    <script src="http://3dact.com/static/js/raphael.sketchpad.js"></script>
+    <script src="http://3dact.com/static/js/canvas2image.js"></script> 
+    <script type="text/javascript" src="http://3dact.com/static/js/canvg.js"></script> 
+    <script type="text/javascript" src="http://3dact.com/static/js/base64.js"></script>
+    <script type="text/javascript" src="http://3dact.com/static/js/hg-helpers-svg.js"></script>
+    <script type="text/javascript" src="http://cdn.rawgit.com/niklasvh/html2canvas/master/dist/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="http://3dact.com/static/js/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://3dact.com/static/js/bootstrap/dist/css/bootstrap-theme.min.css">
+    <script src="http://3dact.com/static/js/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Application Styles and Scripts -->
+    <link rel="stylesheet" href="http://3dact.com/static/js/jsbootcamp.css">
+    <script type="text/javascript" src="http://3dact.com/static/js/raphael-paint.js"></script>
+<link rel="stylesheet"
+href="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.css"  type="text/css" />
+
+<script type="text/javascript" 
+src="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.js" ></script>
+
+<script type="text/javascript" src="http://www.kevlindev.com/gui/2D.js" ></script>
+
+<script type="text/javascript" 
+src="http://www.kevlindev.com/geometry/2D/intersections/IntersectionUtilities.js" ></script>
+
+<script type="text/javascript" 
+src="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.utils.js" ></script>
+<!--
+    <script src="http://3dact.com/static/js/wq/chart.js"></script>
+    <script src="http://3dact.com/static/js/wq/pandas.js"></script>
+-->
+    <style>
+        text {
+            font: 12px sans-serif;
+        }
+        svg {
+            display: block;
+            margin-top:1%;
+            margin-bottom:-50px;
+            height:600px;
+            width:800px;         
+            margin-left:1%;
+            margin-right:-2%;
+        }
+
+        html, body, #chart1 {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+            width: 100%;
+        }
+
+        svg.padding-please  {
+             padding-left: 0px;
+             padding-top: 0px;
+             padding-right:0px;
+             background-color: rgb(128,128,128);
+             border: 1px solid black;
+             border-left: 0px solid black;
+             margin: 0px;
+        }
+
+        #imgs {
+             margin-left:1%;
+             margin-top:10px;
+        }
+ 
+        #save {
+             margin-left:1%;
+             margin-top:10px;
+             margin-bottom:10px; 
+        }
+
+    </style>
+ 
+    <script>
+
+    function importSVG(sourceSVG) {
+                // https://developer.mozilla.org/en/XMLSerializer
+                var svgElement = document.body.getElementsByTagName("svg")[0];
+                var svgXml = (new XMLSerializer()).serializeToString(svgElement);
+    //x svg_Element.style.display="none";
+                var finalSvg = svgXml.FixForRaphael();
+
+
+
+               //add canvas into body        
+                var canvasId = "myCanvas";
+                var canvas = document.createElement('canvas');
+                canvas.id = canvasId;
+                document.body.appendChild(canvas);
+
+                var ctx = canvas.getContext('2d');
+                var DOMURL = window.URL || window.webkitURL || window;
+                // this is just a JavaScript (HTML) image
+                var img = new Image();
+                // http://en.wikipedia.org/wiki/SVG#Native_support
+                // https://developer.mozilla.org/en/DOM/window.btoa
+
+/*
+                canvg(document.getElementById(canvasId), finalSvg, {
+                      ignoreMouse: true,
+                      ignoreAnimation: true,
+                      renderCallback: function() {
+
+                      //save canvas as image
+                                 Canvas2Image.saveAsPNG(document.getElementById(canvasId));
+                                  document.body.removeChild(document.getElementById(canvasId));
+                      }
+                });
+*/
+
+                img.src = "data:image/svg+xml;base64," + btoa(finalSvg);
+
+                img.onload = function() {
+                    // after this, Canvas’ origin-clean is DIRTY
+                    console.log("loaded", img.src)
+                    ctx.drawImage(img, 0, 0);
+                }
+    }
+
+
+    function saveSVG(w,h,type) {
+//                var paper = Raphael('canvas_container');
+ 
+                // https://developer.mozilla.org/en/XMLSerializer
+               var svgElement = document.body.getElementsByTagName("svg")[0];
+
+               var pathArray = document.querySelectorAll('path');
+
+               for (var pathIndex = 0; pathIndex < pathArray.length; pathIndex++) {
+                      var pathObj = pathArray[pathIndex];
+                      if ($(pathObj).attr('fill') == "none") {
+
+
+                          //move the current fill path before the first series svg element.
+                                svgElement.insertBefore(pathObj, svgElement.firstChild);
+                      }
+               }
+
+
+
+               var svgXml = (new XMLSerializer()).serializeToString(svgElement);
+
+
+
+          
+               var finalSvg = svgXml.FixForRaphael();
+
+                //loop on all the path drawn by highchart
+
+
+
+
+
+               //add canvas into body
+                var canvasId = "myCanvas";
+                var canvas;
+
+
+                canvas = document.getElementById("myCanvas");
+
+                if (canvas==undefined) {
+                   canvas = document.createElement('canvas');
+                   canvas.id = canvasId;
+                   document.body.appendChild(canvas);
+                }
+
+
+
+                canvas.height=200;
+                canvas.width=200;
+                
+
+                var ctx = canvas.getContext('2d');
+
+        
+                // this is just a JavaScript (HTML) image
+                var img = new Image();
+                img.height=$("#imgH").val();
+                img.width=$("#imgW").val();
+             
+         //       canvg(document.getElementById(canvasId), finalSvg, {
+
+           //           ignoreMouse: true,
+           //           ignoreAnimation: true,
+           //            renderCallback: function() {
+
+                      //save canvas as image
+                //                  Canvas2Image.saveAsPNG(document.getElementById(canvasId));
+           //      //                 document.body.removeChild(document.getElementById(canvasId));
+             //         }
+             //   });
+
+
+                       //Use canvg to draw the SVG onto the empty canvas
+                canvg(document.getElementById('myCanvas'), finalSvg);
+                var canvasdata = 'data:image/svg+xml;base64,'+ btoa( unescape( encodeURIComponent(finalSvg)));
+                img.src = canvasdata;//"data:image/svg+xml;base64,\n"+b64;
+                img.height=100;
+                img.width=100;  
+
+
+var svg = document.querySelector( "svg" );
+svg.setAttribute("shape-rendering", "crispEdges");
+var svgData = new XMLSerializer().serializeToString( svg );
+
+var canvas = document.createElement( "canvas" );
+var ctx = canvas.getContext( "2d" );
+
+var img = document.createElement( "img" );
+img.setAttribute( "src", "data:image/svg+xml;base64," +btoa(unescape(encodeURIComponent(svgData))) );
+img.height=$("#imgH").val();
+img.width=$("#imgW").val();
+
+                img.onload = function() {
+                    // after this, Canvas’ origin-clean is DIRTY
+                    ctx.drawImage(img, 0,0,100,100);
+                }
+                return img;
+    }
+
+    function changePalette() {
+        var svgElement = document.body.getElementsByTagName("svg")[0];
+        $(svgElement).css('background',$("#fillColorPicker").val());
+        return false;
+    }
+
+    $(document).ready(function(){
+        var height=600;
+        var width=800;
+        var paper = Raphael('canvas_container',500,600); 
+
+        jQuery( paper.canvas ).attr( "class", "padding-please" );  // `canvas` gives us direct access to the DOM node  
+
+        Raphael.fn.addMargin = function addMargin( ratio )
+        {
+            var contentBox = { x: 100000, y: 100000, width: 0, height: 0 };
+ 
+         this.forEach(   function( element )
+                           {
+                                var elemBox = element.getBBox();
+                                contentBox.x = Math.min( contentBox.x, elemBox.x );
+                                contentBox.y = Math.min( contentBox.y, elemBox.y );
+                                contentBox.width = Math.max( contentBox.width, elemBox.width );
+                                contentBox.height = Math.max( contentBox.height, elemBox.height );
+                            }, this );
+
+            if ( contentBox.x == 100000 )   //  No elements?  Whatevs
+                 return;
+            var xMargin = contentBox.width * ratio;
+            var yMargin = contentBox.height * ratio;
+            this.setViewBox( contentBox.x - xMargin, contentBox.y - yMargin, contentBox.width + xMargin * 2, contentBox.height + xMargin * 2 );
+        }
+
+
+  //      var viewport = VisDock.getViewport(); 
+
+//        VisDock.init("svg", width-20, height+290); 
+        paper.addMargin( 0.2 );
+
+        $( "#fillColorPicker" ).change(function() {
+                    var svgElement = document.body.getElementsByTagName("svg")[0];
+                    $(svgElement).css('background',$("#fillColorPicker").val());
+        });
+       
+        changePalette(); 
+
+        /*
+
+        VisDock.color = ["red","magenta","orange","yellow","OliveDrab","green","DeepSkyBlue","SlateBlue"];
+        VisDock.opacity = "0.4";
+
+        VisDock.selectionHandler = {
+                   getHitsPolygon: function(points, inclusive) {
+                    // This event is called when selections are made using Polygon, Lasso and Rectangular tools.
+
+                   return hits; 
+        },
+
+
+        getHitsEllipse: function(points, inclusive) {
+             // This event is called when selections are made using made using Ellipse Tool.
+                   return hits; 
+        },
+
+        getHitsLine: function(points, inclusive) {
+             // This event is called when selections are made using Polyline, Straightline, and Freeselection tools.
+
+                   return hits; 
+        },
+
+        setColor: function(hits) {
+             // This event is called when the user wants to change the colors of the selection layers.
+
+        },
+
+        changeVisibility: function(vis, query) {
+             // This event is called when the user wants to change the visibility of the selection layers.
+
+        },
+
+        removeColor: function(hits, index) {
+             // This event is called when the user wants to remove the colour of the selection layers.
+
+        },
+
+    }
+
+*/
+      //  VisDock.init("#canvas_container", width, height); 
+
+
+ // Add freeTransform
+        // Put example JS here...
+
+    $('#save-btn').click(function(){
+            html2canvas($('#canvas_container'), {
+                onrendered: function (canvas) {
+                    var img = canvas.toDataURL("image/png/result.png")
+                    window.open(img);
+                }
+            });
+
+    });
+
+
+    });
+
+    </script>
+</head>
+<body>
+    <!-- Here are the SVG objects for the tiger example --!>
+{% block content %}{% endblock %}
+</body>
+</html>
