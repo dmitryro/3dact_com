@@ -58,14 +58,13 @@ src="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.utils.js" 
         }
         svg {
             display: block;
-            margin-top:1%;
-            margin-bottom:-50px;
             height:600px;
             width:800px;         
-            margin-left:1%;
-            margin-right:-2%;
         }
 
+        path {
+           margin-left:-200px;
+        }
         html, body, #chart1 {
             margin: 0px;
             padding: 0px;
@@ -93,14 +92,28 @@ src="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.utils.js" 
              margin-top:10px;
              margin-bottom:10px; 
         }
-
+        .remove {
+             height:25px;
+             width:25px;
+             background:url('http://3dact.com/media/delete_01.png');
+             background-size: 25px 25px;
+             background-repeat: no-repeat;
+             position:relative;
+             margin-right:5px;             
+             margin-top:5px;               
+        }  
     </style>
  
     <script>
 
+    function dropdraft(v) {
+       $(document.getElementById(v)).parent().remove();
+    }
+
     function importSVG(sourceSVG) {
                 // https://developer.mozilla.org/en/XMLSerializer
                 var svgElement = document.body.getElementsByTagName("svg")[0];
+                $(svgElement).css('padding-left','-200px');
                 var svgXml = (new XMLSerializer()).serializeToString(svgElement);
     //x svg_Element.style.display="none";
                 var finalSvg = svgXml.FixForRaphael();
@@ -154,9 +167,9 @@ src="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.utils.js" 
                for (var pathIndex = 0; pathIndex < pathArray.length; pathIndex++) {
                       var pathObj = pathArray[pathIndex];
                       if ($(pathObj).attr('fill') == "none") {
-
-
+                                pathObj.style="margin-left:-300px;padding-left:-300px;-webkit-tap-highlight-color: rgba(0, 0, 0, 0); stroke-linecap: round;";
                           //move the current fill path before the first series svg element.
+                                pathObj.setAttribute('style','margin-left:-200px');
                                 svgElement.insertBefore(pathObj, svgElement.firstChild);
                       }
                }
@@ -185,15 +198,13 @@ src="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.utils.js" 
 
                 if (canvas==undefined) {
                    canvas = document.createElement('canvas');
+                   $(canvas).css('margin-left','-200px');
                    canvas.id = canvasId;
                    document.body.appendChild(canvas);
                 }
 
 
 
-                canvas.height=200;
-                canvas.width=200;
-                
 
                 var ctx = canvas.getContext('2d');
 
@@ -220,25 +231,24 @@ src="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.utils.js" 
                 canvg(document.getElementById('myCanvas'), finalSvg);
                 var canvasdata = 'data:image/svg+xml;base64,'+ btoa( unescape( encodeURIComponent(finalSvg)));
                 img.src = canvasdata;//"data:image/svg+xml;base64,\n"+b64;
-                img.height=100;
-                img.width=100;  
 
 
-var svg = document.querySelector( "svg" );
-svg.setAttribute("shape-rendering", "crispEdges");
-var svgData = new XMLSerializer().serializeToString( svg );
+                var svg = document.querySelector( "svg" );
+                svg.setAttribute("shape-rendering", "crispEdges");
+                var svgData = new XMLSerializer().serializeToString( svg );
 
-var canvas = document.createElement( "canvas" );
-var ctx = canvas.getContext( "2d" );
+                var canvas = document.createElement( "canvas" );
+                var ctx = canvas.getContext( "2d" );
 
-var img = document.createElement( "img" );
-img.setAttribute( "src", "data:image/svg+xml;base64," +btoa(unescape(encodeURIComponent(svgData))) );
-img.height=$("#imgH").val();
-img.width=$("#imgW").val();
+                var img = document.createElement( "img" );
+
+                img.setAttribute( "src", "data:image/svg+xml;base64," +btoa(unescape(encodeURIComponent(svgData))) );
+                img.height=$("#imgH").val();
+                img.width=$("#imgW").val();
 
                 img.onload = function() {
                     // after this, Canvas’ origin-clean is DIRTY
-                    ctx.drawImage(img, 0,0,100,100);
+                    ctx.drawImage(img, 0,0);
                 }
                 return img;
     }
@@ -254,39 +264,23 @@ img.width=$("#imgW").val();
         var width=800;
         var paper = Raphael('canvas_container',500,600); 
 
-        jQuery( paper.canvas ).attr( "class", "padding-please" );  // `canvas` gives us direct access to the DOM node  
-
-        Raphael.fn.addMargin = function addMargin( ratio )
-        {
-            var contentBox = { x: 100000, y: 100000, width: 0, height: 0 };
- 
-         this.forEach(   function( element )
-                           {
-                                var elemBox = element.getBBox();
-                                contentBox.x = Math.min( contentBox.x, elemBox.x );
-                                contentBox.y = Math.min( contentBox.y, elemBox.y );
-                                contentBox.width = Math.max( contentBox.width, elemBox.width );
-                                contentBox.height = Math.max( contentBox.height, elemBox.height );
-                            }, this );
-
-            if ( contentBox.x == 100000 )   //  No elements?  Whatevs
-                 return;
-            var xMargin = contentBox.width * ratio;
-            var yMargin = contentBox.height * ratio;
-            this.setViewBox( contentBox.x - xMargin, contentBox.y - yMargin, contentBox.width + xMargin * 2, contentBox.height + xMargin * 2 );
-        }
+        //jQuery( paper.canvas ).attr( "class", "padding-please" );  // `canvas` gives us direct access to the DOM node  
 
 
   //      var viewport = VisDock.getViewport(); 
 
 //        VisDock.init("svg", width-20, height+290); 
-        paper.addMargin( 0.2 );
+ //       paper.addMargin( 0.2 );
 
         $( "#fillColorPicker" ).change(function() {
                     var svgElement = document.body.getElementsByTagName("svg")[0];
                     $(svgElement).css('background',$("#fillColorPicker").val());
         });
-       
+
+        $('.remove').bind('click',function(e) {
+             alert('test');
+        });
+ 
         changePalette(); 
 
         /*

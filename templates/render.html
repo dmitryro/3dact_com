@@ -2,7 +2,7 @@
 {% block content %}
 <h4>Render Content</h4>
  <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
-    <span style="float: left">Stroke Color: <br><input type="color" id="strokeColorPicker" value="#000000"></span>
+    <span style="float: left">Stroke Color: <br><input type="color" id="strokeColorPicker" value="#FFFFFF"></span>
     <span style="float: left">Fill Color: <br><input type="color" id="fillColorPicker" value="#000000" onclick="changePalette();"></span>
     <span style="float: left; margin: 30px 5px">Stroke Width: <input type="number" id="strokeWidthPicker" value="5" min="1" max="256"></span>
     <div class="btn-group" style="float: left; margin: 30px 5px">
@@ -23,9 +23,9 @@
 
   <!-- Modal -->
   <div id="canvas_container" style="border:1px black solid;height:600px;width:800px;margin-left:1%;margin-right:-200px;">
-            <svg height="400" width="600">
+            <svg height="600" width="800">
             </svg>
-            <canvas id="cvs" width="600px" height="400px" style="display:none;"></canvas>
+            <canvas id="cvs" width="800px" height="600px" style="display:none;"></canvas>
 
   </div>
   <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -100,7 +100,7 @@
         var canvas = $("canvas").first(); 
         canvas.onmousedown = function(e) {
             bMouseIsDown = true;
-            iLastX = e.clientX - canvas.offsetLeft + (window.pageXOffset||document.body.scrollLeft||document.documentElement.scrollLeft);
+            iLastX = e.clientX - canvas.offsetLeft + (window.pageXOffset||document.body.scrollLeft||document.documentElement.scrollLeft) - 200;
             iLastY = e.clientY - canvas.offsetTop + (window.pageYOffset||document.body.scrollTop||document.documentElement.scrollTop);
         }
         canvas.onmouseup = function() {
@@ -110,7 +110,7 @@
         }
         canvas.onmousemove = function(e) {
             if (bMouseIsDown) {
-                var iX = e.clientX - canvas.offsetLeft + (window.pageXOffset||document.body.scrollLeft||document.documentElement.scrollLeft);
+                var iX = e.clientX - canvas.offsetLeft + (window.pageXOffset||document.body.scrollLeft||document.documentElement.scrollLeft) - 200;
                 var iY = e.clientY - canvas.offsetTop + (window.pageYOffset||document.body.scrollTop||document.documentElement.scrollTop);
                 ctx.moveTo(iLastX, iLastY);
                 ctx.lineTo(iX, iY);
@@ -130,7 +130,25 @@
             var type = $sel.value,
                 w = $imgW.value,
                 h = $imgH.value;
-            $imgs.appendChild(saveSVG(w,h,type));            
+            var img = saveSVG(w,h,type);
+            
+            var div = document.createElement('div');
+            $(div).css('float','left');
+
+            div.appendChild(img)   
+            div_x = document.createElement('div');
+
+            $(div_x).attr('class','remove');  
+            $(div_x).attr('id',Math.random()); 
+            $(div_x).attr('onclick','dropdraft("'+$(div_x).attr('id')+'");');
+            $(div_x).css('margin-top',-h+5)
+            $(div_x).css('margin-left',w-30);
+            div.appendChild(div_x);           
+
+            $imgs.appendChild(div);
+           
+       //     $imgs.appendChild(img);            
+        //    $imgs.appendChild(post);   
        //     $imgs.appendChild(Canvas2Image.convertToImage(canvas, w, h, type));
         }
         
@@ -138,10 +156,6 @@
     function draw () {
         var canvas = $("canvas").first(); 
         var ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, 600, 400);
-        ctx.fillStyle = 'red';
-        ctx.fillRect(100, 100, 50, 50);
     }
     
     
