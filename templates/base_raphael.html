@@ -35,15 +35,15 @@
     <!-- Application Styles and Scripts -->
     <link rel="stylesheet" href="http://3dact.com/static/js/jsbootcamp.css">
     <script type="text/javascript" src="http://3dact.com/static/js/raphael-paint.js"></script>
-<link rel="stylesheet"
+    <link rel="stylesheet"
 href="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.css"  type="text/css" />
 
-<script type="text/javascript" 
+    <script type="text/javascript" 
 src="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.js" ></script>
 
-<script type="text/javascript" src="http://www.kevlindev.com/gui/2D.js" ></script>
+    <script type="text/javascript" src="http://www.kevlindev.com/gui/2D.js" ></script>
 
-<script type="text/javascript" 
+    <script type="text/javascript" 
 src="http://www.kevlindev.com/geometry/2D/intersections/IntersectionUtilities.js" ></script>
 
 <script type="text/javascript" 
@@ -131,7 +131,22 @@ src="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.utils.js" 
     function processdraft(v) {
        var img = $(document.getElementById(v)).parent();
 //.getElementsByTagName("img")[0];
-       alert($(img).find('img:first').attr('src'));
+
+       $.ajax({
+            type: "POST",
+            url: "http://3dact.com/process/",
+            data: '{"url":"'+$(img).find('img:first').attr('src')+'"}',
+
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(data) {
+              alert(data);
+            },
+            error: function(data){
+              alert("failure"+data);
+           }
+       });
+
 
     }
 

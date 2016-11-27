@@ -22,6 +22,7 @@ from django.views.generic import TemplateView
 import django.template.loader
 from rest_framework import routers
 
+from custom.process.views import ImageProcessView
 from custom.emotion.views import EmotionViewSet
 from custom.emotion.views import EmotionView
 from custom.emotion.views import emotion_view
@@ -49,6 +50,7 @@ urlpatterns = [
     url(r'^django-rq/', include('django_rq.urls')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^accounts_api/', include('registration_api.urls')),
+    url(r'^process/$',ImageProcessView.as_view()),
     url(r'^auth/', include('rest_framework_social_oauth2.urls')),
     url(r'^emotionsdata/$',emotion_view),
     url(r'^graphs/$',graphs_view),
