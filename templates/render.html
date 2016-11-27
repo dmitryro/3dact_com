@@ -136,14 +136,34 @@
             $(div).css('float','left');
 
             div.appendChild(img)   
+
             div_x = document.createElement('div');
+            div_e = document.createElement('div');
+            div_p = document.createElement('div');
+
+            $(div_p).attr('class','process');
+            $(div_p).attr('id',Math.random());
+            $(div_p).attr('onclick','processdraft("'+$(div_p).attr('id')+'");');
+            $(div_p).css('margin-top',-h+5)
+            $(div_p).css('margin-left',w-90);
+            div.appendChild(div_p);
+
+
+            $(div_e).attr('class','edit');
+            $(div_e).attr('id',Math.random());
+            $(div_e).attr('onclick','editdraft("'+$(div_e).attr('id')+'");');
+            $(div_e).css('margin-top',-25)
+            $(div_e).css('margin-left',w-60);
+            div.appendChild(div_e);
+
 
             $(div_x).attr('class','remove');  
             $(div_x).attr('id',Math.random()); 
             $(div_x).attr('onclick','dropdraft("'+$(div_x).attr('id')+'");');
-            $(div_x).css('margin-top',-h+5)
+            $(div_x).css('margin-top',-25)
             $(div_x).css('margin-left',w-30);
             div.appendChild(div_x);           
+
 
             $imgs.appendChild(div);
            
