@@ -1,6 +1,7 @@
 {% extends "base_raphael.html" %}
 {% block content %}
 <h4>Render Content</h4>
+ <div style="clear:both;"></div>
  <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
     <span style="float: left">Stroke Color: <br><input type="color" id="strokeColorPicker" value="#FFFFFF"></span>
     <span style="float: left">Fill Color: <br><input type="color" id="fillColorPicker" value="#000000" onclick="changePalette();"></span>
@@ -22,12 +23,39 @@
   </nav>  
 
   <!-- Modal -->
-  <div id="canvas_container" style="border:1px black solid;height:600px;width:800px;margin-left:1%;margin-right:-200px;">
-            <svg height="600" width="800">
-            </svg>
-            <canvas id="cvs" width="800px" height="600px" style="display:none;"></canvas>
-            <input type="file" id="image-transport" style="display:none;" />
+  <div id="os_data" style="width:100%;height:2%;">
+      Your OS: {{ os }}
   </div>
+
+  <div id="canvas_container" style="border:1px black solid;height:600px;width:800px;margin-left:1%;margin-right:-200px;float:left;">
+                 <svg height="600" width="800">
+                 </svg>
+                 <canvas id="cvs" width="800px" height="600px" style="display:none;"></canvas>
+                 <input type="file" id="image-transport" style="display:none;" />
+  </div>
+  
+  <div style="height:600px;width:29.5%;float:left;margin-left:10%;border:1px black solid;" id="model">
+          <div>     Model </div>
+          <div style="margin-top:20px;margin-left:20px;">
+              <div style="float:left;width:20%;font-weight:bold;font-size:1.4em;" id="func-original"></div>
+              <div style="float:left;width:10%;font-weight:bold;font-size:1.4em;" id="func-original-label"></div>
+              <div style="float:left;width:60%;font-weight:bold;;font-size:1.4em;" id="func-original-value"></div>
+              <div style="clear:both;"></div>
+              <div style="float:left;width:20%;font-weight:bold;font-size:1.4em;" id="func-integrated"></div>
+              <div style="float:left;width:10%;font-weight:bold;font-size:1.4em;" id="func-integrated-label"></div>
+              <div style="float:left;width:60%;font-weight:bold;;font-size:1.4em;" id="func-integrated-value"></div>
+              <div style="clear:both;"></div>
+
+          </div>
+          <div style="clear:both;"></div>  
+  </div>
+
+  <div style="height:600px;width:29.5%;float:left;margin-left:10px;border:1px black solid;position:relative;" id="graph">
+                 graph
+  </div>
+
+  <div style="clear:both;"></div>
+
   <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -74,6 +102,7 @@
   <div id="imgs">
         
   </div>
+  <div style="clear:both;"></div>
 <script>
     var canvas, ctx, bMouseIsDown = false, iLastX, iLastY,
         $save, $imgs,
@@ -127,11 +156,12 @@
             //Canvas2Image.saveAsImage(canvas, w, h, type);
         }
         $convert.onclick = function (e) {
+            $('#graph').html('');
             var type = $sel.value,
                 w = $imgW.value,
                 h = $imgH.value;
             var img = saveSVG(w,h,type);
-            
+            $('#graph').html('');            
             var div = document.createElement('div');
             $(div).css('float','left');
 
@@ -140,9 +170,8 @@
             div_x = document.createElement('div');
             div_e = document.createElement('div');
             div_p = document.createElement('div');
-
             $(div_p).attr('class','process');
-            $(div_p).attr('id',Math.random());
+            $(div_p).attr('id',String(count));
             $(div_p).attr('onclick','processdraft("'+$(div_p).attr('id')+'");');
             $(div_p).css('margin-top',-h+5)
             $(div_p).css('margin-left',w-90);

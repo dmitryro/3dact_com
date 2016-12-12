@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <meta charset="utf-8">
+    <title>Fuzz staging quiz</title>
+    <style type="text/css">
+        body {
+            font-family: monospace;
+        }
+    </style>
+    <script type="text/javascript" src="/static/js/scrambler.js"></script>
+    <script type="text/javascript">
+
+
+        $(document).ready(function() {
+            var phrase = "Elegantly unscramble this message using the space provided. Then write the " +
+                      "scrambler that made it. The answer is an object with global scope that can " +
+                      "scramble and unscramble any text any number of times.";
+
+            scrambler.scramble(phrase);
+
+            $("#button-scramble").click(function() {scrambler.scramble(phrase)});
+            $("#button-unscramble").click(function() {scrambler.unscramble()});
+        });
+    </script>
+</head>
+<body>
+    <button id="button-scramble">Scramble</button>
+    <button id="button-unscramble">Unscramble</button>
+    <div id="scrambler"></div>
+</body>
+</html>

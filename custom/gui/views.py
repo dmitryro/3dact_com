@@ -1,3 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
+def scramble_view(request):
+    return render(request, 'scramble.html', {})
+

@@ -13,6 +13,11 @@
 <!--
     <script src="http://3dact.com/static/js/require.js"></script>
 -->
+<!--
+    <script src="http://fuelcdn.com/fuelux/2.3/loader.min.js"></script>
+-->
+
+ 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
 
     <!-- Bring In Bootstrap -->
@@ -24,6 +29,7 @@
     <script src="http://3dact.com/static/js/json2-min.js"></script>
     <script src="http://3dact.com/static/js/raphael.sketchpad.js"></script>
     <script src="http://3dact.com/static/js/canvas2image.js"></script> 
+    <script src="https://wzrd.in/standalone/function-plot@1.17.3"></script>
     <script type="text/javascript" src="http://3dact.com/static/js/canvg.js"></script> 
     <script type="text/javascript" src="http://3dact.com/static/js/base64.js"></script>
     <script type="text/javascript" src="http://3dact.com/static/js/hg-helpers-svg.js"></script>
@@ -101,7 +107,18 @@ src="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.utils.js" 
              position:relative;
              margin-right:5px;             
              margin-top:5px;               
-        }  
+        } 
+        .remove_graph {
+             height:25px;
+             width:25px;
+             background:url('http://3dact.com/media/delete_01.png');
+             background-size: 25px 25px;
+             background-repeat: no-repeat;
+             position:relative;
+             margin-right:5px;
+             margin-top:5px;
+        }
+ 
         .edit {
              height:25px;
              width:25px;
@@ -129,7 +146,7 @@ src="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.utils.js" 
     <script>
     var gCanvas;
     var gCtx;
-
+    var count=0;
     function load(){
         console.log("loaded");
         gCanvas = document.getElementById("mcanvas");
@@ -140,8 +157,8 @@ src="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.utils.js" 
 
     function processdraft(v) {
        var img = $(document.getElementById(v)).parent();
-
        var imag = new Image();
+       $('#graph').html('');
        imag.setAttribute('crossOrigin', 'anonymous');
                 // http://en.wikipedia.org/wiki/SVG#Native_support
                 // https://developer.mozilla.org/en/DOM/window.btoa
@@ -171,8 +188,18 @@ src="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.utils.js" 
       /// file.value = img;
 
 
-
- 
+       if(v==0) {
+          func = 'x^3';
+          func_integ = '3 * (x^2)';
+       }
+       else if(v==1) {
+          func = 'x^4';
+          func_integ = '4 * (x^3)';
+       }
+       else if(v==2) {
+          func = 'sin(x)';
+          func_integ = 'cos(x)';
+       }
 
        $.ajax({
             type: "POST",
@@ -182,7 +209,47 @@ src="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.utils.js" 
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function(data) {
-              alert("success--"+data);
+              $('#graph').html('');
+              functionPlot({
+                   target: '#graph',
+                   width: 580,
+                   height: 550,
+                   xAxis: {
+                           label: 'x - axis',
+                           domain: [-12, 12]
+                   },
+                   yAxis: {
+                           label: 'y - axis'
+                   },
+                   grid: true,
+                   data: [{
+                      fn: func,
+                      nSamples: 1000
+                   }]
+              });
+
+              $('#func-original').html('Original:');
+              $('#func-original-label').html('f(x) = ');
+              $('#func-original-value').html(func);
+
+
+              $('#func-integrated').html('Integrated:');   
+              $('#func-integrated-label').html('F(x) = ');
+              $('#func-integrated-value').html(func_integ);
+
+              var div_g = document.getElementById('graph');
+
+              div_x = document.createElement('div');
+
+              $(div_x).attr('class','remove_graph');
+              $(div_x).attr('id','draft_'+String(count));
+              count=count+1;   
+              $(div_x).attr('onclick','dropdraft("'+$(div_x).attr('id')+'");');
+              $(div_x).css('margin-top',-25)
+              $(div_x).css('margin-left',w-30);
+              div_g.appendChild(div_x);
+
+
             },
             error: function(data){
               alert("failure"+data);
@@ -193,6 +260,17 @@ src="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.utils.js" 
     }
 
     function dropdraft(v) {
+       count=count-1;
+       $('#graph').html('');
+       $('#func-original').html('');
+       $('#func-original-label').html('');
+       $('#func-original-value').html('');
+
+
+       $('#func-integrated').html('');
+       $('#func-integrated-label').html('');
+       $('#func-integrated-value').html('');
+
        $(document.getElementById(v)).parent().remove();
     }
 

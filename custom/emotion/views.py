@@ -30,7 +30,20 @@ class EmotionView(PandasView):
 # Create your views here.
 @permission_classes((AllowAny, ))
 def render_view(request):
-    return render(request, 'render.html', {'error':'expired'})
+
+    result = None
+    header = request.META['HTTP_USER_AGENT']
+   
+    if header.find('Android')>0:
+       result = 'Android'
+
+    elif header.find('Windows')>0:
+       result= 'Windows'
+
+    else:
+       result = 'iOS'
+
+    return render(request, 'render.html', {'error':'expired','os':result})
 
 # Create your views here.
 @permission_classes((AllowAny, ))
