@@ -147,6 +147,7 @@ src="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.utils.js" 
     var gCanvas;
     var gCtx;
     var count=0;
+
     function load(){
         console.log("loaded");
         gCanvas = document.getElementById("mcanvas");
@@ -186,7 +187,6 @@ src="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.utils.js" 
  
       // var file = input.files[0];
       /// file.value = img;
-
 
        if(v==0) {
           func = 'x^3';
@@ -237,17 +237,19 @@ src="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.utils.js" 
               $('#func-integrated-label').html('F(x) = ');
               $('#func-integrated-value').html(func_integ);
 
-              var div_g = document.getElementById('graph');
+            //  var div_g = document.getElementById('graph');
 
-              div_x = document.createElement('div');
+            //  div_x = document.createElement('div');
 
-              $(div_x).attr('class','remove_graph');
-              $(div_x).attr('id','draft_'+String(count));
-              count=count+1;   
-              $(div_x).attr('onclick','dropdraft("'+$(div_x).attr('id')+'");');
-              $(div_x).css('margin-top',-25)
-              $(div_x).css('margin-left',w-30);
-              div_g.appendChild(div_x);
+              //$(div_x).attr('class','remove_graph');
+             // $(div_x).attr('id','draft_'+String(count));
+              //count=count+1;   
+              //$('#count').attr('value',count);
+              //$(div_x).attr('onclick','dropdraft("'+$(div_x).attr('id')+'");');
+                    
+           //   $(div_x).css('margin-top',-25)
+            //  $(div_x).css('margin-left',w-30);
+            //  div_g.appendChild(div_x);
 
 
             },
@@ -260,7 +262,10 @@ src="http://rawgithub.com/VisDockHub/NewVisDock/master/master/visdock.utils.js" 
     }
 
     function dropdraft(v) {
-       count=count-1;
+       $('#count').attr('value',String(eval(v)-1));
+
+       alert($('#count').val());
+
        $('#graph').html('');
        $('#func-original').html('');
        $('#func-original-label').html('');

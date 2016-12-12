@@ -102,6 +102,7 @@
   <div id="imgs">
         
   </div>
+  <input type="hidden" id="count" name="count" value="" />
   <div style="clear:both;"></div>
 <script>
     var canvas, ctx, bMouseIsDown = false, iLastX, iLastY,
@@ -155,8 +156,19 @@
                 h = $imgH.value;
             //Canvas2Image.saveAsImage(canvas, w, h, type);
         }
+
         $convert.onclick = function (e) {
             $('#graph').html('');
+
+
+            var c = $('#count').val();
+
+            if (c=="" || c==-1) {
+                $("#count").attr("value",0);
+            }
+            else {
+               $("#count").attr("value",String(eval(c)+1)); 
+            }             
             var type = $sel.value,
                 w = $imgW.value,
                 h = $imgH.value;
@@ -171,7 +183,7 @@
             div_e = document.createElement('div');
             div_p = document.createElement('div');
             $(div_p).attr('class','process');
-            $(div_p).attr('id',String(count));
+            $(div_p).attr('id',$('#count').val());
             $(div_p).attr('onclick','processdraft("'+$(div_p).attr('id')+'");');
             $(div_p).css('margin-top',-h+5)
             $(div_p).css('margin-left',w-90);
@@ -179,7 +191,7 @@
 
 
             $(div_e).attr('class','edit');
-            $(div_e).attr('id',Math.random());
+            $(div_e).attr('id',$('#count').val());
             $(div_e).attr('onclick','editdraft("'+$(div_e).attr('id')+'");');
             $(div_e).css('margin-top',-25)
             $(div_e).css('margin-left',w-60);
@@ -187,7 +199,7 @@
 
 
             $(div_x).attr('class','remove');  
-            $(div_x).attr('id',Math.random()); 
+            $(div_x).attr('id',$('#count').val()); 
             $(div_x).attr('onclick','dropdraft("'+$(div_x).attr('id')+'");');
             $(div_x).css('margin-top',-25)
             $(div_x).css('margin-left',w-30);
